@@ -9,16 +9,16 @@ int main()
 {
 	cout << "Enter an expression: ";
 	string s, postfix;
-	int size, length;
+	int size;
 	cin >> s;
 	Operand* x = new Operand[s.length()];
 	Postfix A;
 	try
 	{
-		A.PostfixForm(s, postfix, x, size, length);
+		A.PostfixForm(s, postfix, x, size);
 		cout << postfix << endl;
 		A.Input_var(x, size);
-		double value = A.Calculation(postfix, x, size, length);
+		double value = A.Calculation(postfix, x, size);
 		cout << s << " = " << value;
 	}
 	catch (const char* exc)

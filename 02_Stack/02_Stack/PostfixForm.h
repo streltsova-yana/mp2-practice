@@ -16,7 +16,7 @@ private:
 	static int Priority(const char a);
 	static bool operand(const char a);
 public:
-	static void PostfixForm(string s, string& postfix, Operand* & x, int& size, int& length);
+	static void PostfixForm(const string& s, string& postfix, Operand* & x, int& size);
 	static void Input_var(Operand* & x, int size);
-	static double Calculation(string postfix, Operand* x, int size, int length);
+	static double Calculation(const string& postfix, Operand* & x, int size);
 };

@@ -3,11 +3,11 @@
 int Postfix::Priority(const char a)
 {
 	if ((a == '(') || (a == ')'))
-		return 0;
+		return 2;
 	if ((a == '*') || (a == '/'))
 		return 1;
 	if ((a == '+') || (a == '-'))
-		return 2;
+		return 0;
 };
 bool Postfix::operand(const char a)
 {
@@ -15,7 +15,7 @@ bool Postfix::operand(const char a)
 		return false;
 	return true;
 };
-void Postfix::PostfixForm(string s, string& postfix, Operand* & x, int& size, int& length)
+void Postfix::PostfixForm(const string& s, string& postfix, Operand*& x, int& size)
 {
 
 	if (s.length() == 0)
@@ -26,13 +26,12 @@ void Postfix::PostfixForm(string s, string& postfix, Operand* & x, int& size, in
 	TStack<char> B(s.length() + 1);
 	int i = 0;
 	size = 0;
-	length = 0;
+	int left = 0, right = 0;
 	while (s[i] != '\0')
 	{
 		if (operand(s[i]))
 		{
 			A.Push(s[i]);
-			length++;
 			int flag = 0;
 			for (int j = 0; j < size; j++)
 				if (s[i] == x[j].name)
@@ -43,39 +42,41 @@ void Postfix::PostfixForm(string s, string& postfix, Operand* & x, int& size, in
 		else
 		{
 			if (s[i] == '(')
+			{
 				B.Push(s[i]);
+				left++;
+			}
 			if (s[i] == ')')
 			{
+				if (B.IsEmpty())
+					throw "Error: no '('";
 				while (B.Top() != '(')
 				{
 					A.Push(B.Top());
-					length++;
 					B.Pop();
 					if (B.IsEmpty())
 						throw "Error: no '('";
-				}
+				} 
 				B.Pop();
+				right++;
 			}
 			if ((s[i] != '(') && (s[i] != ')'))
 			{
-				if (!B.IsEmpty())
+				while ((!B.IsEmpty()) && (Priority(B.Top()) >= Priority(s[i])) && (B.Top() != '('))
 				{
-					while (Priority(B.Top()) >= Priority(s[i]))
-					{
-						A.Push(B.Top());
-						length++;
-						B.Pop();
-					}
+					A.Push(B.Top());
+					B.Pop();
 				}
 				B.Push(s[i]);
 			}
 		}
 		i++;
 	}
+	if (left != right)
+		throw "Error: no ')'";
 	while (!B.IsEmpty())
 	{
 		A.Push(B.Top());
-		length++;
 		B.Pop();
 	}
 	while (!A.IsEmpty())
@@ -83,8 +84,8 @@ void Postfix::PostfixForm(string s, string& postfix, Operand* & x, int& size, in
 		postfix += A.Top();
 		A.Pop();
 	}
-	for (int i = 0; i < length / 2; i++)
-		swap(postfix[i], postfix[length - 1 - i]);
+	for (int i = 0; i < postfix.length() / 2; i++)
+		swap(postfix[i], postfix[postfix.length() - 1 - i]);
 }
 void Postfix::Input_var(Operand*& x, int size)
 {
@@ -92,10 +93,10 @@ void Postfix::Input_var(Operand*& x, int size)
 	for (int i = 0; i < size; i++)
 		cin >> x[i].value;
 }
-double Postfix::Calculation(string postfix, Operand* x, int size, int length)
+double Postfix::Calculation(const string& postfix, Operand* & x, int size)
 {
-	TStack<double> A(length);
-	for (int i = 0; i < length; i++)
+	TStack<double> A(postfix.length());
+	for (int i = 0; i < postfix.length(); i++)
 	{
 		if (operand(postfix[i]))
 		{
