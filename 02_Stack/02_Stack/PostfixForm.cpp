@@ -15,7 +15,41 @@ bool Postfix::operand(const char a)
 		return false;
 	return true;
 };
-void Postfix::PostfixForm(const string& s, string& postfix, Operand*& x, int& size)
+void Postfix::Count(const string& s, Operand*& x, int& size)
+{
+	size = 0;
+	int i = 0;
+	while (s[i] != '\0')
+	{
+		if (operand(s[i]))
+		{
+			int flag = 0;
+			for (int j = 0; j < i; j++)
+				if (s[i] == s[j])
+					flag = 1;
+			if (flag == 0)
+				size++;
+		}
+		i++;
+	}
+	x = new Operand[size];
+	int k = 0;
+	i = 0;
+	while (s[i] != '\0')
+	{
+		if (operand(s[i]))
+		{
+			int flag = 0;
+			for (int j = 0; j < k; j++)
+				if (s[i] == x[j].name)
+					flag = 1;
+			if (flag == 0)
+				x[k++].name = s[i];
+		}
+		i++;
+	}
+}
+void Postfix::PostfixForm(const string& s, string& postfix)
 {
 
 	if (s.length() == 0)
@@ -25,20 +59,11 @@ void Postfix::PostfixForm(const string& s, string& postfix, Operand*& x, int& si
 	TStack<char> A(s.length() + 1);
 	TStack<char> B(s.length() + 1);
 	int i = 0;
-	size = 0;
 	int left = 0, right = 0;
 	while (s[i] != '\0')
 	{
 		if (operand(s[i]))
-		{
 			A.Push(s[i]);
-			int flag = 0;
-			for (int j = 0; j < size; j++)
-				if (s[i] == x[j].name)
-					flag = 1;
-			if (flag == 0)
-				x[size++].name = s[i];
-		}
 		else
 		{
 			if (s[i] == '(')
