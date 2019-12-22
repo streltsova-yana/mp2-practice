@@ -27,9 +27,10 @@ int Menu()
 	cout << "7 - Multiplication" << endl;
 	cout << "8 - Equating" << endl;
 	cout << "9 - Comparison" << endl;
-	cout << "10 - Exit" << endl;
+	cout << "10 - Copy constructor" << endl;
+	cout << "11 - Exit" << endl;
 	int mode = 0;
-	while ((mode <= 0) || (mode > 10))
+	while ((mode <= 0) || (mode > 11))
 		cin >> mode;
 	return mode;
 }
@@ -144,6 +145,12 @@ void VCompar(TVector<double> v)
 	if (v == v1)
 		cout << "Yes" << endl;
 	else cout << "No" << endl;
+}
+void VCopy(TVector<double> v)
+{
+	TVector<double> v1(v);
+	cout << "A copy of the ";
+	VPrint(v1);
 }
 
 //Тест матрицы
@@ -274,6 +281,43 @@ void MCompar(TMatrix<double> m)
 		cout << "Yes" << endl;
 	else cout << "No" << endl;
 }
+void MCopy(TMatrix<double> m)
+{
+	int i = Mode();
+	if (i == 1)
+	{
+		int n = 0;
+		cout << "Enter vector size: ";
+		do
+		{
+			cin >> n;
+		} while ((n <= 0) || (n > 10));
+		TVector<TVector<double> > v1(n);
+		for (int i = 0; i < n; i++)
+		{
+			TVector<double> a(n - i, i);
+			cout << "Enter a vector of length " << n - i << ": ";
+			try
+			{
+				cin >> a;
+			}
+			catch (const char* a)
+			{
+				cout << a << endl;
+			}
+			v1[i] = a;
+		}
+		TMatrix<double> m1(v1);
+		cout << "A copy of the ";
+		MPrint(m1);
+	}
+	else
+	{
+		TMatrix<double> m1(m);
+		cout << "A copy of the ";
+		MPrint(m1);
+	}
+}
 
 int main()
 {
@@ -378,7 +422,17 @@ int main()
 				MCompar(m);
 			}
 			break;
+		case 10:
+			if (i == 1)
+			{
+				VCopy(v);
+			}
+			else
+			{
+				MCopy(m);
+			}
+			break;
 		}
-	} while (j != 10);
+	} while (j != 11);
 	return 0;
 }
