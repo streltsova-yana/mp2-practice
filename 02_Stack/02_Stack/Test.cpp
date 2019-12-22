@@ -11,11 +11,12 @@ int main()
 	string s, postfix;
 	int size;
 	cin >> s;
-	Operand* x = new Operand[s.length()];
+	Operand* x;
 	Postfix A;
 	try
 	{
-		A.PostfixForm(s, postfix, x, size);
+		A.Count(s, x, size);
+		A.PostfixForm(s, postfix);
 		cout << postfix << endl;
 		A.Input_var(x, size);
 		double value = A.Calculation(postfix, x, size);
