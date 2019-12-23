@@ -26,5 +26,6 @@ int main()
 	{
 		cout << exc << endl;
 	}
+	delete x;
 	return 0;
 }

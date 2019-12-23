@@ -114,7 +114,10 @@ void Postfix::PostfixForm(const string& s, string& postfix)
 }
 void Postfix::Input_var(Operand*& x, int size)
 {
-	cout << "Enter the value of the variables in the order in which they are received" << endl;
+	cout << "Enter the variable values in the following order: ";
+	for (int i = 0; i < size; i++)
+		cout << x[i].name << " ";
+	cout << endl;
 	for (int i = 0; i < size; i++)
 		cin >> x[i].value;
 }
