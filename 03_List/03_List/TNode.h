@@ -4,11 +4,11 @@ struct TNode
 {
 	TKey key;
 	TData* Data;
-	TNode* pNext;
+	TNode<TKey, TData>* pNext;
 
 	TNode();
-	TNode(TKey _key, TData* _data, TNode* _pNext = NULL);
-	TNode(const TNode& a);
+	TNode(TKey _key, TData* _data, TNode<TKey, TData>* _pNext = NULL);
+	TNode(const TNode<TKey, TData>& a);
 	~TNode();
 };
 
@@ -19,10 +19,11 @@ TNode<TKey, TData>::TNode()
 	pNext = NULL;
 }
 template <class TKey, class TData>
-TNode<TKey, TData>::TNode(TKey _key, TData* _data, TNode* _pNext)
+TNode<TKey, TData>::TNode(TKey _key, TData* _data, TNode<TKey, TData>* _pNext)
 {
 	key = _key;
-	Data = new TData;
+	Data = new TData(*_data);
+	/*Data = new TData;*/
 	Data = _data;
 	pNext = _pNext;
 }
@@ -38,6 +39,7 @@ template <class TKey, class TData>
 TNode<TKey, TData>::~TNode()
 {
 	key = 0;
-	Data = NULL;
+	delete Data;
+	Data = NULL; // delete Data
 	pNext = NULL;
 }

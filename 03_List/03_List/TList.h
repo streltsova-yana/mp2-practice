@@ -15,7 +15,7 @@ private:
 public:
 	TList();
 	TList(TNode<TKey, TData>* a);
-	TList(const TList& a);
+	TList(const TList<TKey, TData>& a);
 	~TList();
 
 	bool IsEnded() const;
@@ -79,7 +79,7 @@ TList<TKey, TData>::TList(TNode<TKey, TData>* a)
 	}
 };
 template <class TKey, class TData>
-TList<TKey, TData>::TList(const TList& a)
+TList<TKey, TData>::TList(const TList<TKey, TData>& a)
 {
 	pPrev = NULL;
 	pCurr = NULL;
@@ -125,7 +125,7 @@ template <class TKey, class TData>
 void TList<TKey, TData>::Next()
 {
 	if (IsEnded())
-		return;
+		throw "Error: list is empty";//throw
 	pPrev = pCurr;
 	pCurr = pNext;
 	if (pNext != NULL)
@@ -191,9 +191,13 @@ void TList<TKey, TData>::PushBack(TKey _key, TData* _data)
 		Next();
 	pCurr = new TNode<TKey, TData>(_key, _data);
 	pPrev->pNext = pCurr;
+	if (curr == pPrev)
+		pNext = pCurr;
+	else
+		pNext = next;
 	pPrev = prev;
 	pCurr = curr;
-	pNext = next;
+	/*pNext = next; *//// if
 };
 template <class TKey, class TData>
 void TList<TKey, TData>::InsertBefore(TKey search_key, TKey ins_key, TData* _data)
