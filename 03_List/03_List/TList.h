@@ -4,7 +4,7 @@
 
 using namespace std;
 
-template <class TKey, class TData>
+template <typename TKey, typename TData>
 class TList
 {
 private:
@@ -48,7 +48,7 @@ public:
 	}
 };
 
-template <class TKey, class TData>
+template <typename TKey, typename TData>
 TList<TKey, TData>::TList()
 {
 	pFirst = NULL;
@@ -56,7 +56,7 @@ TList<TKey, TData>::TList()
 	pCurr = NULL;
 	pNext = NULL;
 };
-template <class TKey, class TData>
+template <typename TKey, typename TData>
 TList<TKey, TData>::TList(TNode<TKey, TData>* a)
 {
 	pPrev = NULL;
@@ -78,7 +78,7 @@ TList<TKey, TData>::TList(TNode<TKey, TData>* a)
 		Reset();
 	}
 };
-template <class TKey, class TData>
+template <typename TKey, typename TData>
 TList<TKey, TData>::TList(const TList<TKey, TData>& a)
 {
 	pPrev = NULL;
@@ -101,27 +101,24 @@ TList<TKey, TData>::TList(const TList<TKey, TData>& a)
 		Reset();
 	}
 };
-template <class TKey, class TData>
+template <typename TKey, typename TData>
 TList<TKey, TData>::~TList()
 {
-	Reset();
-	while (!IsEnded())
+	TNode<TKey, TData>* tmp = pFirst, * next;
+	while (tmp != nullptr)
 	{
-		Next();
-		delete pPrev;
+		next = tmp->pNext;
+		delete tmp;
+		tmp = next;
 	}
-	pFirst = NULL;
-	pPrev = NULL;
-	pCurr = NULL;
-	pNext = NULL;
 };
 
-template <class TKey, class TData>
+template <typename TKey, typename TData>
 bool TList<TKey, TData>::IsEnded() const
 {
 	return (pCurr == NULL);
 };
-template <class TKey, class TData>
+template <typename TKey, typename TData>
 void TList<TKey, TData>::Next()
 {
 	if (IsEnded())
@@ -132,7 +129,7 @@ void TList<TKey, TData>::Next()
 		pNext = pNext->pNext;
 	else pNext = NULL;
 };
-template <class TKey, class TData>
+template <typename TKey, typename TData>
 void TList<TKey, TData>::Reset()
 {
 	pPrev = NULL;
@@ -143,7 +140,7 @@ void TList<TKey, TData>::Reset()
 		pNext = NULL;
 };
 
-template <class TKey, class TData>
+template <typename TKey, typename TData>
 TNode<TKey, TData>* TList<TKey, TData>::Search(TKey _key)
 {
 	TNode<TKey, TData>* prev = pPrev;
@@ -161,7 +158,7 @@ TNode<TKey, TData>* TList<TKey, TData>::Search(TKey _key)
 	pNext = next;
 	return node;
 };
-template <class TKey, class TData>
+template <typename TKey, typename TData>
 void TList<TKey, TData>::PushFront(TKey _key, TData* _data)
 {
 	if (pFirst == NULL)
@@ -175,7 +172,7 @@ void TList<TKey, TData>::PushFront(TKey _key, TData* _data)
 		pPrev = tmp;
 	pFirst = tmp;
 };
-template <class TKey, class TData>
+template <typename TKey, typename TData>
 void TList<TKey, TData>::PushBack(TKey _key, TData* _data)
 {
 	if (pFirst == NULL)
@@ -199,7 +196,7 @@ void TList<TKey, TData>::PushBack(TKey _key, TData* _data)
 	pCurr = curr;
 	/*pNext = next; *//// if
 };
-template <class TKey, class TData>
+template <typename TKey, typename TData>
 void TList<TKey, TData>::InsertBefore(TKey search_key, TKey ins_key, TData* _data)
 {
 	if (pFirst == NULL)
@@ -230,7 +227,7 @@ void TList<TKey, TData>::InsertBefore(TKey search_key, TKey ins_key, TData* _dat
 		pPrev = prev;
 	pCurr = curr;
 };
-template <class TKey, class TData>
+template <typename TKey, typename TData>
 void TList<TKey, TData>::InsertAfter(TKey search_key, TKey ins_key, TData* _data)
 {
 	if (pFirst == NULL)
@@ -256,7 +253,7 @@ void TList<TKey, TData>::InsertAfter(TKey search_key, TKey ins_key, TData* _data
 		pPrev = prev;
 	pCurr = curr;
 };
-template <class TKey, class TData>
+template <typename TKey, typename TData>
 void TList<TKey, TData>::Remove(TKey _key)
 {
 	if (pFirst == NULL)
